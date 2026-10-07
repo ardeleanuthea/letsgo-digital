@@ -89,6 +89,23 @@ main{position:relative;z-index:1;max-width:440px;margin:0 auto;padding:40px 20px
 .card .btn{justify-content:center;text-align:center;min-height:58px}
 .card .btn .arr{margin-left:0}
 
+/* Programare */
+.days{display:grid;grid-template-columns:repeat(4,1fr);gap:8px}
+.day{position:relative;display:block}
+.day input{position:absolute;opacity:0;inset:0;width:100%;height:100%;margin:0;cursor:pointer}
+.day span{display:flex;flex-direction:column;align-items:center;gap:2px;padding:10px 2px 11px;border-radius:14px;border:1px solid rgba(247,247,245,.2);background:rgba(11,31,29,.4);transition:background-color .15s ease,border-color .15s ease,color .15s ease}
+.day b{font-size:11px;line-height:14px;font-weight:600;letter-spacing:.1em;text-transform:uppercase;color:rgba(247,247,245,.62)}
+.day i{font-style:normal;font-size:15px;line-height:20px;font-weight:600;letter-spacing:-.01em;font-variant-numeric:tabular-nums}
+.day input:checked+span{background:rgba(16,185,129,.16);border-color:var(--em);color:#D9FBEF;box-shadow:0 0 16px rgba(16,185,129,.18)}
+.day input:checked+span b{color:var(--em)}
+.day input:focus-visible+span{outline:3px solid #7DE3C3;outline-offset:2px}
+.day input:disabled+span{opacity:.35}
+.hours{display:grid;grid-template-columns:repeat(4,1fr);gap:8px}
+.hours .chip span{text-align:center;padding:10px 0;font-variant-numeric:tabular-nums}
+.quiet{margin:0;font-size:14px;line-height:20px;font-weight:500;color:rgba(247,247,245,.6)}
+.f .sub{margin:8px 0 0;font-size:13px;line-height:19px;font-weight:500;color:rgba(247,247,245,.6)}
+.card .btn[disabled]{opacity:.6;cursor:default}
+
 /* Mulțumire */
 #v-done{margin-top:32px}
 .done h1{margin-bottom:8px}
@@ -195,7 +212,35 @@ main{position:relative;z-index:1;max-width:440px;margin:0 auto;padding:40px 20px
     </form>
   </section>
 
-  <!-- 3. Mulțumire -->
+  <!-- 3. Programare -->
+  <section id="v-slot" hidden>
+    <button class="back" type="button" id="slot-back">← Înapoi</button>
+    <form class="card" id="slot-form" novalidate>
+      <h1 id="slot-title" tabindex="-1">Alegeți ziua și ora</h1>
+      <p class="lead">Discuția durează 30 de minute, pe Google Meet. Orele sunt după ora României.</p>
+
+      <fieldset class="f" data-slot="zi">
+        <legend>Ziua</legend>
+        <div class="days" id="days"></div>
+        <p class="quiet" id="days-msg" hidden></p>
+      </fieldset>
+      <fieldset class="f" data-slot="ora">
+        <legend>Ora</legend>
+        <div class="hours" id="hours"></div>
+        <p class="quiet" id="hours-msg">Alegeți întâi ziua.</p>
+      </fieldset>
+      <div class="f" data-slot="email">
+        <label class="l" for="email">Emailul vostru</label>
+        <input type="text" id="email" name="email" inputmode="email" autocomplete="email" autocapitalize="none" autocorrect="off" spellcheck="false" maxlength="120">
+        <p class="sub">Aici primiți invitația, cu linkul de Google Meet.</p>
+      </div>
+
+      <p class="msg" id="slot-msg" role="alert" hidden></p>
+      <button class="btn btn-p" type="submit" id="slot-submit"><span id="slot-submit-text">Confirmați discuția</span><svg class="arr" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg></button>
+    </form>
+  </section>
+
+  <!-- 4. Mulțumire -->
   <section id="v-done" hidden>
     <div class="card done">
       <h1 id="done-title" tabindex="-1">Mulțumim!</h1>
@@ -212,16 +257,22 @@ main{position:relative;z-index:1;max-width:440px;margin:0 auto;padding:40px 20px
 // ---- De completat înainte de publicare ----
 var CFG = {
   whatsapp: '',   // numărul, cu prefixul țării, fără + și fără spații. Exemplu de formă: 407xxxxxxxx
-  calendar: '',   // linkul paginii de programare
-  primire: '',    // adresa la care se trimit răspunsurile (email + ClickUp)
-  confidentialitate: '' // linkul către Politica de confidențialitate
+  serviciu: '',   // adresa serviciului care trimite răspunsurile (email + ClickUp) și face programarea în calendar
+  confidentialitate: '', // linkul către Politica de confidențialitate
+  // Programul discuțiilor, ora României. zile: 1 = luni ... 5 = vineri (fără miercuri).
+  program: { zile: [1, 2, 4, 5], deLa: '10:00', panaLa: '18:00', minute: 30, zileInainte: 14 }
 };
 // -------------------------------------------
 
 (function () {
   var $ = function (id) { return document.getElementById(id); };
-  var views = { home: $('v-home'), form: $('v-form'), done: $('v-done') };
-  var form = $('form'), canal = 'whatsapp', KEY = 'lgd-formular';
+  var views = { home: $('v-home'), form: $('v-form'), slot: $('v-slot'), done: $('v-done') };
+  var titles = { form: 'form-title', slot: 'slot-title', done: 'done-title' };
+  var form = $('form'), slotForm = $('slot-form'), canal = 'whatsapp', KEY = 'lgd-formular', zile = null;
+  var ZI = ['duminică', 'luni', 'marți', 'miercuri', 'joi', 'vineri', 'sâmbătă'];
+  var ZI_SCURT = ['Dum', 'Lun', 'Mar', 'Mie', 'Joi', 'Vin', 'Sâm'];
+  var LUNA = ['ianuarie', 'februarie', 'martie', 'aprilie', 'mai', 'iunie', 'iulie', 'august', 'septembrie', 'octombrie', 'noiembrie', 'decembrie'];
+  var LUNA_SCURT = ['ian', 'feb', 'mar', 'apr', 'mai', 'iun', 'iul', 'aug', 'sept', 'oct', 'nov', 'dec'];
 
   if (CFG.confidentialitate) { $('privacy').href = CFG.confidentialitate; $('privacy-wrap').hidden = false; }
 
@@ -229,12 +280,12 @@ var CFG = {
     for (var k in views) views[k].hidden = k !== name;
     $('tag').hidden = name !== 'home';
     window.scrollTo(0, 0);
-    var t = name === 'form' ? $('form-title') : name === 'done' ? $('done-title') : null;
-    if (t) t.focus({ preventScroll: true });
+    if (titles[name]) $(titles[name]).focus({ preventScroll: true });
   }
   function saved() { try { return JSON.parse(sessionStorage.getItem(KEY) || 'null'); } catch (e) { return null; } }
   function save(d) { try { sessionStorage.setItem(KEY, JSON.stringify(d)); } catch (e) {} }
 
+  // ---------- formularul
   function read() {
     var fd = new FormData(form);
     return {
@@ -267,53 +318,151 @@ var CFG = {
     if (d.termen) r.push('Termen: ' + d.termen);
     return r.join('\n');
   }
+  function pachet(d, extra) {
+    var o = { nume: d.nume, firma: d.firma, site: d.site, interes: d.interes.join(', '), obiectiv: d.obiectiv, termen: d.termen, pagina: 'link din bio' };
+    for (var k in extra) o[k] = extra[k];
+    return JSON.stringify(o);
+  }
+  // WhatsApp: trimitem răspunsurile și plecăm imediat, fără să așteptăm răspunsul serviciului.
   function trimite(d) {
-    if (!CFG.primire) return;
-    var p = new URLSearchParams();
-    p.set('nume', d.nume); p.set('firma', d.firma); p.set('site', d.site);
-    p.set('interes', d.interes.join(', ')); p.set('obiectiv', d.obiectiv); p.set('termen', d.termen);
-    p.set('canal', canal === 'whatsapp' ? 'WhatsApp' : 'Programare'); p.set('pagina', 'link din bio');
+    if (!CFG.serviciu) return;
+    var body = pachet(d, { actiune: 'formular', canal: 'WhatsApp' });
     try {
-      if (!(navigator.sendBeacon && navigator.sendBeacon(CFG.primire, p)))
-        fetch(CFG.primire, { method: 'POST', body: p, mode: 'no-cors', keepalive: true });
+      if (!(navigator.sendBeacon && navigator.sendBeacon(CFG.serviciu, body)))
+        fetch(CFG.serviciu, { method: 'POST', body: body, mode: 'no-cors', keepalive: true });
     } catch (e) {}
   }
-  function tinta(d) {
-    if (canal === 'whatsapp') return CFG.whatsapp ? 'https://wa.me/' + CFG.whatsapp + '?text=' + encodeURIComponent(mesaj(d)) : '';
-    return CFG.calendar || '';
-  }
-  function gata(d, mergi) {
-    var wa = canal === 'whatsapp', url = tinta(d), prenume = d.nume.split(' ')[0];
-    $('done-title').textContent = 'Mulțumim, ' + prenume + '!';
-    $('done-text').textContent = wa
-      ? 'Se deschide WhatsApp, cu răspunsurile voastre deja scrise în mesaj. Dacă nu s-a deschis, apăsați butonul de mai jos.'
-      : 'Mai rămâne să alegeți ora care vi se potrivește. Dacă nu s-a deschis calendarul, apăsați butonul de mai jos.';
-    var b = $('done-btn');
-    b.textContent = wa ? 'Deschideți WhatsApp' : 'Deschideți calendarul';
-    b.href = url || '#';
-    var dev = $('dev');
+  function gataWhatsApp(d, mergi) {
+    var url = CFG.whatsapp ? 'https://wa.me/' + CFG.whatsapp + '?text=' + encodeURIComponent(mesaj(d)) : '';
+    $('done-title').textContent = 'Mulțumim, ' + d.nume.split(' ')[0] + '!';
+    $('done-text').textContent = 'Se deschide WhatsApp, cu răspunsurile voastre deja scrise în mesaj. Dacă nu s-a deschis, apăsați butonul de mai jos.';
+    var b = $('done-btn'), dev = $('dev');
+    b.hidden = false; b.textContent = 'Deschideți WhatsApp'; b.href = url || '#';
     if (!url) {
       dev.hidden = false;
-      dev.innerHTML = wa
-        ? 'Previzualizare: lipsește numărul de WhatsApp. Acesta este mesajul care se va deschide în conversație:<pre></pre>'
-        : 'Previzualizare: lipsește linkul calendarului. Aici se va deschide pagina de programare.';
-      if (wa) dev.querySelector('pre').textContent = mesaj(d);
+      dev.innerHTML = 'Previzualizare: lipsește numărul de WhatsApp. Acesta este mesajul care se va deschide în conversație:<pre></pre>';
+      dev.querySelector('pre').textContent = mesaj(d);
       b.onclick = function (e) { e.preventDefault(); };
     } else { dev.hidden = true; b.onclick = null; }
     show('done');
     if (url && mergi) setTimeout(function () { location.href = url; }, 700);
   }
 
+  // ---------- programarea
+  function parti(data) { var p = data.split('-'); return { a: +p[0], l: +p[1], z: +p[2], s: new Date(Date.UTC(+p[0], +p[1] - 1, +p[2])).getUTCDay() }; }
+  function ziLunga(data) { var p = parti(data); return ZI[p.s] + ', ' + p.z + ' ' + LUNA[p.l - 1]; }
+  function aziInRomania() { return new Intl.DateTimeFormat('en-CA', { timeZone: 'Europe/Bucharest', year: 'numeric', month: '2-digit', day: '2-digit' }).format(new Date()); }
+  function minute(hm) { var p = hm.split(':'); return +p[0] * 60 + +p[1]; }
+  function ora(m) { return ('0' + Math.floor(m / 60)).slice(-2) + ':' + ('0' + (m % 60)).slice(-2); }
+  // Fără serviciu (previzualizare): toate orele din program apar libere.
+  function zileDinProgram() {
+    var P = CFG.program, a = parti(aziInRomania()), out = [];
+    for (var i = 1; i <= P.zileInainte; i++) {
+      var d = new Date(Date.UTC(a.a, a.l - 1, a.z + i));
+      if (P.zile.indexOf(d.getUTCDay()) < 0) continue;
+      var ore = [];
+      for (var m = minute(P.deLa); m + P.minute <= minute(P.panaLa); m += P.minute) ore.push(ora(m));
+      out.push({ data: d.toISOString().slice(0, 10), ore: ore });
+    }
+    return out;
+  }
+  function incarcaZile() {
+    if (!CFG.serviciu) return Promise.resolve(zileDinProgram());
+    return fetch(CFG.serviciu + '?actiune=ore', { redirect: 'follow' })
+      .then(function (r) { return r.json(); })
+      .then(function (j) { if (!j || !j.zile) throw new Error('raspuns'); return j.zile; });
+  }
+  function deseneazaZile() {
+    var box = $('days'), msg = $('days-msg');
+    box.innerHTML = ''; $('hours').innerHTML = ''; $('hours-msg').hidden = false; $('hours-msg').textContent = 'Alegeți întâi ziua.';
+    if (!zile.length) { msg.hidden = false; msg.textContent = 'Nu sunt ore libere în următoarele două săptămâni. Scrieți-ne pe WhatsApp.'; return; }
+    msg.hidden = true;
+    zile.forEach(function (z) {
+      var p = parti(z.data), l = document.createElement('label');
+      l.className = 'day';
+      l.innerHTML = '<input type="radio" name="zi"><span><b></b><i></i></span>';
+      var inp = l.querySelector('input');
+      inp.value = z.data; inp.disabled = !z.ore.length;
+      inp.setAttribute('aria-label', ziLunga(z.data) + (z.ore.length ? '' : ', fără ore libere'));
+      l.querySelector('b').textContent = ZI_SCURT[p.s];
+      l.querySelector('i').textContent = p.z + ' ' + LUNA_SCURT[p.l - 1];
+      box.appendChild(l);
+    });
+  }
+  function deseneazaOre(data) {
+    var box = $('hours'), z = zile.filter(function (x) { return x.data === data; })[0];
+    box.innerHTML = '';
+    $('hours-msg').hidden = !!(z && z.ore.length);
+    if (!z || !z.ore.length) { $('hours-msg').textContent = 'Nu mai sunt ore libere în ziua aceasta.'; return; }
+    z.ore.forEach(function (o) {
+      var l = document.createElement('label');
+      l.className = 'chip';
+      l.innerHTML = '<input type="radio" name="ora"><span></span>';
+      l.querySelector('input').value = o; l.querySelector('span').textContent = o;
+      box.appendChild(l);
+    });
+  }
+  function eroareSlot(text) { var m = $('slot-msg'); m.hidden = !text; m.textContent = text || ''; }
+  function arataProgramarea() {
+    show('slot'); eroareSlot('');
+    $('days').innerHTML = ''; $('hours').innerHTML = ''; $('hours-msg').hidden = true;
+    $('days-msg').hidden = false; $('days-msg').textContent = 'Se încarcă orele libere…';
+    incarcaZile().then(function (z) { zile = z; deseneazaZile(); })
+      .catch(function () { zile = []; $('days-msg').hidden = false; $('days-msg').textContent = 'Nu am putut încărca orele. Încercați din nou peste un minut sau scrieți-ne pe WhatsApp.'; });
+  }
+  function gataProgramare(d) {
+    var p = d.programare, dev = $('dev'), zi = ziLunga(p.data);
+    $('done-title').textContent = 'Discuția e programată';
+    $('done-text').textContent = zi.charAt(0).toUpperCase() + zi.slice(1) + ', la ' + p.ora + ' (ora României), pe Google Meet. Invitația, cu linkul, ajunge la ' + p.email + '.';
+    $('done-btn').hidden = true;
+    dev.hidden = !p.proba;
+    if (p.proba) dev.textContent = 'Previzualizare: programarea nu a fost trimisă nicăieri. Când serviciul este pornit, ora intră în calendarul agenției și omul primește invitația de Google Meet.';
+    show('done');
+  }
+  slotForm.addEventListener('change', function (e) {
+    if (e.target.name === 'zi') deseneazaOre(e.target.value);
+    var f = e.target.closest('.f'); if (f) f.classList.remove('bad');
+    eroareSlot('');
+  });
+  slotForm.addEventListener('input', function (e) { var f = e.target.closest('.f'); if (f) f.classList.remove('bad'); });
+  slotForm.addEventListener('submit', function (e) {
+    e.preventDefault();
+    var fd = new FormData(slotForm), d = saved();
+    var p = { data: fd.get('zi') || '', ora: fd.get('ora') || '', email: (fd.get('email') || '').trim() };
+    var bad = { zi: !p.data, ora: !p.ora, email: !/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(p.email) };
+    slotForm.querySelectorAll('[data-slot]').forEach(function (el) { el.classList.toggle('bad', bad[el.getAttribute('data-slot')]); });
+    if (bad.zi || bad.ora) { eroareSlot('Alegeți ziua și ora.'); return; }
+    if (bad.email) { eroareSlot('Scrieți o adresă de email la care să primiți invitația.'); $('email').focus(); return; }
+    if (!d) { show('form'); return; }
+    if (!CFG.serviciu) { p.proba = true; d.programare = p; gataProgramare(d); return; } // previzualizare: nu se salvează, ca să poată fi încercată din nou
+    var btn = $('slot-submit'), txt = $('slot-submit-text');
+    btn.disabled = true; txt.textContent = 'Se programează…'; eroareSlot('');
+    fetch(CFG.serviciu, { method: 'POST', redirect: 'follow', body: pachet(d, { actiune: 'programare', canal: 'Programare', data: p.data, ora: p.ora, email: p.email }) })
+      .then(function (r) { return r.json(); })
+      .then(function (j) {
+        btn.disabled = false; txt.textContent = 'Confirmați discuția';
+        if (j && j.ok) { d.programare = p; save(d); gataProgramare(d); return; }
+        if (j && j.motiv === 'ocupat') { eroareSlot('Ora aceasta tocmai a fost luată. Alegeți alta.'); arataZileDinNou(); return; }
+        eroareSlot('Nu am putut face programarea. Încercați din nou sau scrieți-ne pe WhatsApp.');
+      })
+      .catch(function () { btn.disabled = false; txt.textContent = 'Confirmați discuția'; eroareSlot('Nu am putut face programarea. Încercați din nou sau scrieți-ne pe WhatsApp.'); });
+  });
+  function arataZileDinNou() { incarcaZile().then(function (z) { zile = z; deseneazaZile(); }).catch(function () {}); }
+
+  // ---------- butoanele și pașii
   document.querySelectorAll('[data-canal]').forEach(function (btn) {
     btn.addEventListener('click', function () {
       canal = btn.getAttribute('data-canal');
-      var d = saved();
-      if (d) { gata(d, true); return; } // formularul a fost deja trimis în această vizită
-      $('submit').textContent = canal === 'whatsapp' ? 'Continuați pe WhatsApp' : 'Alegeți ora discuției';
+      var d = saved(); // formularul a fost deja completat în această vizită
+      if (d && canal === 'whatsapp') { gataWhatsApp(d, true); return; }
+      if (d && d.programare) { gataProgramare(d); return; }
+      if (d) { arataProgramarea(); return; }
+      $('submit').textContent = canal === 'whatsapp' ? 'Continuați pe WhatsApp' : 'Alegeți ziua și ora';
       show('form');
     });
   });
   $('back').addEventListener('click', function () { show('home'); });
+  $('slot-back').addEventListener('click', function () { show('home'); });
   function progres() {
     var d = read(), n = (d.nume ? 1 : 0) + (d.firma ? 1 : 0) + (d.interes.length ? 1 : 0) + (d.obiectiv ? 1 : 0);
     $('bar').style.width = (n * 25) + '%';
@@ -328,7 +477,9 @@ var CFG = {
     if (d.capcana) { show('home'); return; }
     if (!validate(d)) return;
     delete d.capcana;
-    trimite(d); save(d); gata(d, true);
+    save(d);
+    if (canal === 'whatsapp') { trimite(d); gataWhatsApp(d, true); }
+    else arataProgramarea();
   });
 })();
 </script>
