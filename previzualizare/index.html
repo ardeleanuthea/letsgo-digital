@@ -1,0 +1,332 @@
+<!doctype html>
+<html lang="ro">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Let's Go-Digital</title>
+<meta name="description" content="Facem tehnologia să lucreze pentru voi. Scrieți-ne pe WhatsApp sau programați o discuție gratuită de 30 de minute.">
+<meta name="theme-color" content="#0B1F1D">
+<meta name="robots" content="noindex, nofollow">
+<link rel="icon" href="../icon.svg" type="image/svg+xml">
+<meta property="og:title" content="Let's Go-Digital">
+<meta property="og:image" content="../og.png">
+<style>
+@font-face{font-family:'Inter';font-weight:100 900;font-display:swap;src:url('../InterVariable.woff2') format('woff2')}
+@font-face{font-family:'LG Script';font-weight:400;font-display:swap;src:url('../MrsSaintDelafield-Regular.ttf') format('truetype')}
+:root{--dark:#0B1F1D;--deep:#0E7A65;--em:#10B981;--sand:#F7F7F5;--line:#E4E1DB;--ink:#0B1F1D;--muted:#51605D;--err:#FF8F7D}
+*{box-sizing:border-box}
+html{-webkit-text-size-adjust:100%}
+body{margin:0;min-height:100vh;min-height:100dvh;font-family:'Inter',-apple-system,BlinkMacSystemFont,'Helvetica Neue',Arial,sans-serif;color:var(--sand);
+  background:radial-gradient(900px 700px at 100% 0%,rgba(14,122,101,.62),rgba(14,122,101,0) 62%),radial-gradient(700px 560px at 0% 100%,rgba(16,185,129,.13),rgba(16,185,129,0) 60%),var(--dark);
+  background-attachment:fixed;-webkit-font-smoothing:antialiased}
+body::before{content:"";position:fixed;inset:0;pointer-events:none;background-image:linear-gradient(rgba(247,247,245,.05) 1px,transparent 1px),linear-gradient(90deg,rgba(247,247,245,.05) 1px,transparent 1px);background-size:44px 44px;-webkit-mask-image:radial-gradient(ellipse 75% 55% at 50% 0%,#000 15%,transparent 75%);mask-image:radial-gradient(ellipse 75% 55% at 50% 0%,#000 15%,transparent 75%)}
+body::after{content:"";position:fixed;top:-180px;left:50%;width:560px;height:560px;border-radius:50%;pointer-events:none;background:radial-gradient(circle,rgba(16,185,129,.2),rgba(16,185,129,0) 65%);animation:drift 14s ease-in-out infinite alternate}
+main{position:relative;z-index:1;max-width:440px;margin:0 auto;padding:56px 20px 40px;min-height:100vh;min-height:100dvh;display:flex;flex-direction:column}
+[hidden]{display:none!important}
+
+/* Logo */
+.logo{display:flex;align-items:baseline;justify-content:center;gap:2px;font-weight:800;font-size:34px;letter-spacing:-.03em;line-height:1}
+.logo .s{font-family:'LG Script',cursive;font-weight:400;font-size:78px;letter-spacing:0;line-height:.6;margin-right:-6px;position:relative;top:6px}
+.logo .d{color:var(--em);margin-left:8px}
+.tag{margin:30px auto 0;max-width:350px;text-align:center;font-size:32px;line-height:36px;font-weight:600;letter-spacing:-.045em;color:var(--sand);text-wrap:balance}
+.tag span{display:inline-block;opacity:0;transform:translateY(10px);filter:blur(6px);animation:word .7s cubic-bezier(.2,.7,.2,1) forwards;animation-delay:calc(.15s + var(--i)*.09s)}
+@keyframes word{to{opacity:1;transform:none;filter:none}}
+@keyframes up{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:none}}
+@keyframes drift{from{transform:translate(-62%,0) scale(1)}to{transform:translate(-38%,40px) scale(1.15)}}
+.rise{opacity:0;animation:up .6s cubic-bezier(.2,.7,.2,1) forwards;animation-delay:calc(.75s + var(--i,0)*.09s)}
+
+/* Pagina cu butoane */
+.links{display:flex;flex-direction:column;gap:12px;margin-top:40px}
+.btn{display:flex;align-items:center;gap:14px;width:100%;min-height:68px;padding:14px 20px;border-radius:18px;border:1px solid transparent;font:inherit;font-weight:600;font-size:17px;letter-spacing:-.01em;text-align:left;cursor:pointer;text-decoration:none;transition:transform .12s ease,background-color .12s ease}
+.btn:active{transform:scale(.985)}
+.btn small{display:block;font-weight:500;font-size:14px;line-height:18px;opacity:.75;margin-top:2px}
+.btn svg{flex-shrink:0;width:26px;height:26px}
+.btn .arr{margin-left:auto;width:18px;height:18px;opacity:.7}
+.btn-p{background:var(--em);color:var(--dark)}
+.btn-p:hover{background:#27c795}
+.btn-s{background:rgba(247,247,245,.07);border-color:rgba(247,247,245,.22);color:var(--sand)}
+.btn-s:hover{background:rgba(247,247,245,.12)}
+.btn:focus-visible,.chip input:focus-visible+span,.back:focus-visible{outline:3px solid #7DE3C3;outline-offset:2px}
+.note{margin:18px 4px 0;text-align:center;font-size:14px;line-height:20px;color:rgba(247,247,245,.66)}
+.what{margin:40px 0 0;padding-top:28px;border-top:1px solid rgba(247,247,245,.14);text-align:center}
+.what h2{margin:0 0 10px;font-size:12px;line-height:16px;font-weight:600;letter-spacing:.12em;text-transform:uppercase;color:var(--em)}
+.what p{margin:0;font-size:16px;line-height:25px;font-weight:500;letter-spacing:-.01em;color:rgba(247,247,245,.9);text-wrap:balance}
+.social{display:flex;justify-content:center;flex-wrap:wrap;gap:8px;margin-top:28px}
+.social a{display:flex;align-items:center;gap:8px;min-height:44px;padding:10px 14px;border-radius:999px;border:1px solid rgba(247,247,245,.22);color:var(--sand);text-decoration:none;font-size:14px;font-weight:600;letter-spacing:-.01em}
+.social a:hover{background:rgba(247,247,245,.1)}
+.social a:focus-visible{outline:3px solid #7DE3C3;outline-offset:2px}
+.social svg{width:18px;height:18px;flex-shrink:0}
+.foot{margin-top:auto;padding-top:40px;text-align:center;font-size:13px;color:rgba(247,247,245,.5)}
+
+/* Formular */
+.back{align-self:flex-start;background:none;border:0;color:rgba(247,247,245,.8);font:inherit;font-size:15px;font-weight:500;padding:8px 4px;margin:20px 0 10px -4px;cursor:pointer;border-radius:8px}
+.card{position:relative;overflow:hidden;background:rgba(247,247,245,.055);border:1px solid rgba(247,247,245,.16);color:var(--sand);border-radius:24px;padding:30px 20px 22px;counter-reset:q;-webkit-backdrop-filter:blur(16px);backdrop-filter:blur(16px);animation:up .5s cubic-bezier(.2,.7,.2,1) both}
+.bar{position:absolute;left:0;top:0;right:0;height:3px;background:rgba(247,247,245,.1)}
+.bar i{display:block;height:100%;width:0;background:linear-gradient(90deg,var(--deep),var(--em));box-shadow:0 0 12px rgba(16,185,129,.7);transition:width .35s ease}
+.card h1{margin:0;font-size:28px;line-height:32px;letter-spacing:-.04em;font-weight:600}
+.card .lead{margin:8px 0 24px;font-size:15px;line-height:21px;color:rgba(247,247,245,.68);font-weight:500}
+.f{margin:0 0 20px;border:0;padding:0;min-width:0;counter-increment:q}
+.f label.l,.f legend{display:block;padding:0;margin-bottom:9px;font-size:15px;line-height:20px;font-weight:600;letter-spacing:-.01em}
+.f label.l::before,.f legend::before{content:counter(q,decimal-leading-zero);margin-right:9px;font-size:12px;font-weight:600;letter-spacing:.08em;color:var(--em);font-variant-numeric:tabular-nums}
+.f .hint{font-weight:500;color:rgba(247,247,245,.6)}
+.f input[type=text],.f textarea{width:100%;font:inherit;font-size:16px;line-height:22px;font-weight:500;color:var(--sand);caret-color:var(--em);background:rgba(11,31,29,.55);border:1px solid rgba(247,247,245,.18);border-radius:14px;padding:13px 14px;appearance:none;-webkit-appearance:none;transition:border-color .15s ease,box-shadow .15s ease}
+.f textarea{min-height:92px;resize:vertical}
+.f input[type=text]:focus,.f textarea:focus{outline:none;border-color:var(--em);box-shadow:0 0 0 3px rgba(16,185,129,.2),0 0 22px rgba(16,185,129,.16)}
+.f.bad input[type=text],.f.bad textarea{border-color:var(--err)}
+.f.bad legend,.f.bad label.l{color:var(--err)}
+.chips{display:flex;flex-wrap:wrap;gap:8px}
+.chip{position:relative;display:block}
+.chip input{position:absolute;opacity:0;inset:0;width:100%;height:100%;margin:0;cursor:pointer}
+.chip span{display:block;padding:10px 14px;border-radius:999px;border:1px solid rgba(247,247,245,.2);background:rgba(11,31,29,.4);font-size:15px;line-height:20px;font-weight:500;letter-spacing:-.01em;transition:background-color .15s ease,border-color .15s ease,color .15s ease}
+.chip input:checked+span{background:rgba(16,185,129,.16);border-color:var(--em);color:#D9FBEF;box-shadow:0 0 16px rgba(16,185,129,.18)}
+.hp{position:absolute;left:-9999px;width:1px;height:1px;overflow:hidden}
+.msg{margin:0 0 12px;font-size:14px;line-height:20px;font-weight:600;color:var(--err)}
+.legal{margin:4px 0 16px;font-size:13px;line-height:19px;color:rgba(247,247,245,.6);font-weight:500}
+.legal a{color:var(--em);font-weight:600}
+.card .btn{justify-content:center;text-align:center;min-height:58px}
+.card .btn .arr{margin-left:0}
+
+/* Mulțumire */
+#v-done{margin-top:32px}
+.done h1{margin-bottom:8px}
+.done p{margin:0 0 20px;font-size:16px;line-height:23px;color:rgba(247,247,245,.72);font-weight:500}
+.dev{margin:18px 0 0;padding:14px;border-radius:14px;border:1px dashed #C9A227;background:#FFF9E6;color:#5C4A00;font-size:13px;line-height:19px;font-weight:500}
+.dev pre{margin:8px 0 0;white-space:pre-wrap;word-break:break-word;font:inherit;font-weight:500;color:var(--ink)}
+@media (prefers-reduced-motion:reduce){.btn,.bar i,.chip span,.f input[type=text],.f textarea{transition:none}.tag span,.rise,.card{animation:none;opacity:1;transform:none;filter:none}body::after{animation:none;transform:translate(-50%,0)}}
+</style>
+</head>
+<body>
+<main>
+
+  <div class="logo" aria-label="Let's Go Digital"><span class="s" aria-hidden="true">lets</span><span aria-hidden="true">GO</span><span class="d" aria-hidden="true">DIGITAL.</span></div>
+  <p class="tag" id="tag"><span style="--i:0">Facem</span> <span style="--i:1">tehnologia</span> <span style="--i:2">să</span> <span style="--i:3">lucreze</span> <span style="--i:4">pentru</span> <span style="--i:5">voi.</span></p>
+
+  <!-- 1. Butoanele -->
+  <section id="v-home">
+    <div class="links">
+      <button class="btn btn-p rise" style="--i:0" type="button" data-canal="whatsapp">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"/></svg>
+        <span>Scrieți-ne pe WhatsApp</span>
+        <svg class="arr" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+      </button>
+      <button class="btn btn-s rise" style="--i:1" type="button" data-canal="programare">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3.5" y="5" width="17" height="15.5" rx="3"/><path d="M3.5 10h17M8 3v4M16 3v4"/></svg>
+        <span>Programați o discuție gratuită<small>30 de minute</small></span>
+        <svg class="arr" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+      </button>
+    </div>
+    <p class="note rise" style="--i:2">Înainte, vă punem câteva întrebări scurte. Durează un minut.</p>
+
+    <div class="what rise" style="--i:3">
+      <h2>Ce facem</h2>
+      <p>Site-uri · SEO și GEO · Automatizări · Aplicații · Reclame</p>
+    </div>
+
+    <nav class="social rise" style="--i:4" aria-label="Ne găsiți și aici">
+      <a href="https://www.instagram.com/letsgodigital.ro/" target="_blank" rel="noopener">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="3" width="18" height="18" rx="5"/><circle cx="12" cy="12" r="4"/><path d="M17.5 6.5h.01"/></svg>
+        <span>Instagram</span>
+      </a>
+      <a href="https://www.tiktok.com/@letsgodigital.ro" target="_blank" rel="noopener">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M14 3v11.5a4 4 0 1 1-4-4"/><path d="M14 3c.4 2.8 2.2 4.6 5 5"/></svg>
+        <span>TikTok</span>
+      </a>
+      <a href="https://www.facebook.com/letsgodigital.ro" target="_blank" rel="noopener">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"/></svg>
+        <span>Facebook</span>
+      </a>
+    </nav>
+  </section>
+
+  <!-- 2. Formularul -->
+  <section id="v-form" hidden>
+    <button class="back" type="button" id="back">← Înapoi</button>
+    <form class="card" id="form" novalidate>
+      <div class="bar" aria-hidden="true"><i id="bar"></i></div>
+      <h1 id="form-title" tabindex="-1">Înainte să vorbim</h1>
+      <p class="lead">Durează un minut. Așa venim pregătiți la discuție.</p>
+
+      <div class="f" data-req="nume">
+        <label class="l" for="nume">Numele vostru</label>
+        <input type="text" id="nume" name="nume" autocomplete="name" maxlength="80">
+      </div>
+      <div class="f" data-req="firma">
+        <label class="l" for="firma">Firma voastră</label>
+        <input type="text" id="firma" name="firma" autocomplete="organization" maxlength="100">
+      </div>
+      <div class="f">
+        <label class="l" for="site">Site-ul vostru, <span class="hint">dacă aveți unul</span></label>
+        <input type="text" id="site" name="site" inputmode="url" autocapitalize="none" autocorrect="off" spellcheck="false" maxlength="150">
+      </div>
+      <fieldset class="f" data-req="interes">
+        <legend>Ce vă interesează? <span class="hint">Puteți bifa mai multe.</span></legend>
+        <div class="chips">
+          <label class="chip"><input type="checkbox" name="interes" value="Site sau magazin online"><span>Site sau magazin online</span></label>
+          <label class="chip"><input type="checkbox" name="interes" value="Să apar pe Google și în răspunsurile AI"><span>Să apar pe Google și în răspunsurile AI</span></label>
+          <label class="chip"><input type="checkbox" name="interes" value="Automatizări"><span>Automatizări</span></label>
+          <label class="chip"><input type="checkbox" name="interes" value="O aplicație"><span>O aplicație</span></label>
+          <label class="chip"><input type="checkbox" name="interes" value="Reclame online"><span>Reclame online</span></label>
+          <label class="chip"><input type="checkbox" name="interes" value="Nu știu încă, vreau să vorbim"><span>Nu știu încă, vreau să vorbim</span></label>
+        </div>
+      </fieldset>
+      <div class="f" data-req="obiectiv">
+        <label class="l" for="obiectiv">Ce vreți să obțineți? <span class="hint">O frază e de ajuns.</span></label>
+        <textarea id="obiectiv" name="obiectiv" maxlength="600"></textarea>
+      </div>
+      <fieldset class="f">
+        <legend>Până când aveți nevoie?</legend>
+        <div class="chips">
+          <label class="chip"><input type="radio" name="termen" value="Cât mai repede"><span>Cât mai repede</span></label>
+          <label class="chip"><input type="radio" name="termen" value="În 1-3 luni"><span>În 1-3 luni</span></label>
+          <label class="chip"><input type="radio" name="termen" value="Nu mă grăbesc"><span>Nu mă grăbesc</span></label>
+          <label class="chip"><input type="radio" name="termen" value="Nu știu încă"><span>Nu știu încă</span></label>
+        </div>
+      </fieldset>
+
+      <div class="hp" aria-hidden="true"><label>Lăsați gol <input type="text" name="adresa2" tabindex="-1" autocomplete="off"></label></div>
+
+      <p class="msg" id="msg" role="alert" hidden>Mai lipsesc răspunsurile marcate cu roșu.</p>
+      <p class="legal">Folosim răspunsurile doar ca să pregătim discuția. Detalii în <a id="privacy" href="#" target="_blank" rel="noopener">Politica de confidențialitate</a>.</p>
+      <button class="btn btn-p" type="submit"><span id="submit">Continuați pe WhatsApp</span><svg class="arr" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg></button>
+    </form>
+  </section>
+
+  <!-- 3. Mulțumire -->
+  <section id="v-done" hidden>
+    <div class="card done">
+      <h1 id="done-title" tabindex="-1">Mulțumim!</h1>
+      <p id="done-text"></p>
+      <a class="btn btn-p" id="done-btn" href="#"></a>
+      <div class="dev" id="dev" hidden></div>
+    </div>
+  </section>
+
+  <p class="foot">© 2026 Let's Go-Digital</p>
+</main>
+
+<script>
+// ---- De completat înainte de publicare ----
+var CFG = {
+  whatsapp: '',   // numărul, cu prefixul țării, fără + și fără spații. Exemplu de formă: 407xxxxxxxx
+  calendar: '',   // linkul paginii de programare
+  primire: '',    // adresa la care se trimit răspunsurile (email + ClickUp)
+  confidentialitate: '' // linkul către Politica de confidențialitate
+};
+// -------------------------------------------
+
+(function () {
+  var $ = function (id) { return document.getElementById(id); };
+  var views = { home: $('v-home'), form: $('v-form'), done: $('v-done') };
+  var form = $('form'), canal = 'whatsapp', KEY = 'lgd-formular';
+
+  if (CFG.confidentialitate) $('privacy').href = CFG.confidentialitate;
+
+  function show(name) {
+    for (var k in views) views[k].hidden = k !== name;
+    $('tag').hidden = name !== 'home';
+    window.scrollTo(0, 0);
+    var t = name === 'form' ? $('form-title') : name === 'done' ? $('done-title') : null;
+    if (t) t.focus({ preventScroll: true });
+  }
+  function saved() { try { return JSON.parse(sessionStorage.getItem(KEY) || 'null'); } catch (e) { return null; } }
+  function save(d) { try { sessionStorage.setItem(KEY, JSON.stringify(d)); } catch (e) {} }
+
+  function read() {
+    var fd = new FormData(form);
+    return {
+      nume: (fd.get('nume') || '').trim(),
+      firma: (fd.get('firma') || '').trim(),
+      site: (fd.get('site') || '').trim(),
+      interes: fd.getAll('interes'),
+      obiectiv: (fd.get('obiectiv') || '').trim(),
+      termen: fd.get('termen') || '',
+      capcana: (fd.get('adresa2') || '').trim()
+    };
+  }
+  function validate(d) {
+    var ok = true, first = null;
+    form.querySelectorAll('[data-req]').forEach(function (el) {
+      var k = el.getAttribute('data-req');
+      var bad = k === 'interes' ? d.interes.length === 0 : !d[k];
+      el.classList.toggle('bad', bad);
+      if (bad) { ok = false; if (!first) first = el; }
+    });
+    $('msg').hidden = ok;
+    if (first) { var i = first.querySelector('input,textarea'); if (i) i.focus(); first.scrollIntoView({ block: 'center', behavior: 'smooth' }); }
+    return ok;
+  }
+  function mesaj(d) {
+    var r = ['Bună ziua! Sunt ' + d.nume + ', de la ' + d.firma + '.'];
+    if (d.site) r.push('Site: ' + d.site);
+    r.push('Mă interesează: ' + d.interes.join(', '));
+    r.push('Ce vreau să obțin: ' + d.obiectiv);
+    if (d.termen) r.push('Termen: ' + d.termen);
+    return r.join('\n');
+  }
+  function trimite(d) {
+    if (!CFG.primire) return;
+    var p = new URLSearchParams();
+    p.set('nume', d.nume); p.set('firma', d.firma); p.set('site', d.site);
+    p.set('interes', d.interes.join(', ')); p.set('obiectiv', d.obiectiv); p.set('termen', d.termen);
+    p.set('canal', canal === 'whatsapp' ? 'WhatsApp' : 'Programare'); p.set('pagina', 'link din bio');
+    try {
+      if (!(navigator.sendBeacon && navigator.sendBeacon(CFG.primire, p)))
+        fetch(CFG.primire, { method: 'POST', body: p, mode: 'no-cors', keepalive: true });
+    } catch (e) {}
+  }
+  function tinta(d) {
+    if (canal === 'whatsapp') return CFG.whatsapp ? 'https://wa.me/' + CFG.whatsapp + '?text=' + encodeURIComponent(mesaj(d)) : '';
+    return CFG.calendar || '';
+  }
+  function gata(d, mergi) {
+    var wa = canal === 'whatsapp', url = tinta(d), prenume = d.nume.split(' ')[0];
+    $('done-title').textContent = 'Mulțumim, ' + prenume + '!';
+    $('done-text').textContent = wa
+      ? 'Se deschide WhatsApp, cu răspunsurile voastre deja scrise în mesaj. Dacă nu s-a deschis, apăsați butonul de mai jos.'
+      : 'Mai rămâne să alegeți ora care vi se potrivește. Dacă nu s-a deschis calendarul, apăsați butonul de mai jos.';
+    var b = $('done-btn');
+    b.textContent = wa ? 'Deschideți WhatsApp' : 'Deschideți calendarul';
+    b.href = url || '#';
+    var dev = $('dev');
+    if (!url) {
+      dev.hidden = false;
+      dev.innerHTML = wa
+        ? 'Previzualizare: lipsește numărul de WhatsApp. Acesta este mesajul care se va deschide în conversație:<pre></pre>'
+        : 'Previzualizare: lipsește linkul calendarului. Aici se va deschide pagina de programare.';
+      if (wa) dev.querySelector('pre').textContent = mesaj(d);
+      b.onclick = function (e) { e.preventDefault(); };
+    } else { dev.hidden = true; b.onclick = null; }
+    show('done');
+    if (url && mergi) setTimeout(function () { location.href = url; }, 700);
+  }
+
+  document.querySelectorAll('[data-canal]').forEach(function (btn) {
+    btn.addEventListener('click', function () {
+      canal = btn.getAttribute('data-canal');
+      var d = saved();
+      if (d) { gata(d, true); return; } // formularul a fost deja trimis în această vizită
+      $('submit').textContent = canal === 'whatsapp' ? 'Continuați pe WhatsApp' : 'Alegeți ora discuției';
+      show('form');
+    });
+  });
+  $('back').addEventListener('click', function () { show('home'); });
+  function progres() {
+    var d = read(), n = (d.nume ? 1 : 0) + (d.firma ? 1 : 0) + (d.interes.length ? 1 : 0) + (d.obiectiv ? 1 : 0);
+    $('bar').style.width = (n * 25) + '%';
+  }
+  form.addEventListener('input', function (e) {
+    var f = e.target.closest('.f'); if (f) f.classList.remove('bad');
+    progres();
+  });
+  form.addEventListener('submit', function (e) {
+    e.preventDefault();
+    var d = read();
+    if (d.capcana) { show('home'); return; }
+    if (!validate(d)) return;
+    delete d.capcana;
+    trimite(d); save(d); gata(d, true);
+  });
+})();
+</script>
+</body>
+</html>
