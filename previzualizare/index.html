@@ -15,13 +15,12 @@
 @font-face{font-family:'LG Script';font-weight:400;font-display:swap;src:url('../MrsSaintDelafield-Regular.ttf') format('truetype')}
 :root{--dark:#0B1F1D;--deep:#0E7A65;--em:#10B981;--sand:#F7F7F5;--line:#E4E1DB;--ink:#0B1F1D;--muted:#51605D;--err:#FF8F7D}
 *{box-sizing:border-box}
-html{-webkit-text-size-adjust:100%}
-body{margin:0;min-height:100vh;min-height:100dvh;font-family:'Inter',-apple-system,BlinkMacSystemFont,'Helvetica Neue',Arial,sans-serif;color:var(--sand);
-  background:radial-gradient(900px 700px at 100% 0%,rgba(14,122,101,.62),rgba(14,122,101,0) 62%),radial-gradient(700px 560px at 0% 100%,rgba(16,185,129,.13),rgba(16,185,129,0) 60%),var(--dark);
-  background-attachment:fixed;-webkit-font-smoothing:antialiased}
-body::before{content:"";position:fixed;inset:0;pointer-events:none;background-image:linear-gradient(rgba(247,247,245,.05) 1px,transparent 1px),linear-gradient(90deg,rgba(247,247,245,.05) 1px,transparent 1px);background-size:44px 44px;-webkit-mask-image:radial-gradient(ellipse 75% 55% at 50% 0%,#000 15%,transparent 75%);mask-image:radial-gradient(ellipse 75% 55% at 50% 0%,#000 15%,transparent 75%)}
-body::after{content:"";position:fixed;top:-180px;left:50%;width:560px;height:560px;border-radius:50%;pointer-events:none;background:radial-gradient(circle,rgba(16,185,129,.2),rgba(16,185,129,0) 65%);animation:drift 14s ease-in-out infinite alternate}
-main{position:relative;z-index:1;max-width:440px;margin:0 auto;padding:56px 20px 40px;min-height:100vh;min-height:100dvh;display:flex;flex-direction:column}
+html{-webkit-text-size-adjust:100%;background:var(--dark);overscroll-behavior:none}
+body{margin:0;font-family:'Inter',-apple-system,BlinkMacSystemFont,'Helvetica Neue',Arial,sans-serif;color:var(--sand);background:var(--dark);overscroll-behavior:none;-webkit-font-smoothing:antialiased}
+.bg{position:fixed;inset:0;overflow:hidden;pointer-events:none;background:radial-gradient(900px 700px at 100% 0%,rgba(14,122,101,.62),rgba(14,122,101,0) 62%),radial-gradient(700px 560px at 0% 100%,rgba(16,185,129,.13),rgba(16,185,129,0) 60%),var(--dark)}
+.bg::before{content:"";position:absolute;inset:0;pointer-events:none;background-image:linear-gradient(rgba(247,247,245,.05) 1px,transparent 1px),linear-gradient(90deg,rgba(247,247,245,.05) 1px,transparent 1px);background-size:44px 44px;-webkit-mask-image:radial-gradient(ellipse 75% 55% at 50% 0%,#000 15%,transparent 75%);mask-image:radial-gradient(ellipse 75% 55% at 50% 0%,#000 15%,transparent 75%)}
+.bg::after{content:"";position:absolute;top:-180px;left:50%;width:560px;height:560px;border-radius:50%;pointer-events:none;background:radial-gradient(circle,rgba(16,185,129,.2),rgba(16,185,129,0) 65%);animation:drift 14s ease-in-out infinite alternate}
+main{position:relative;z-index:1;max-width:440px;margin:0 auto;padding:48px 20px max(18px,env(safe-area-inset-bottom));min-height:100vh;min-height:100svh;display:flex;flex-direction:column}
 [hidden]{display:none!important}
 
 /* Logo */
@@ -56,7 +55,7 @@ main{position:relative;z-index:1;max-width:440px;margin:0 auto;padding:56px 20px
 .social a:hover{background:rgba(247,247,245,.1)}
 .social a:focus-visible{outline:3px solid #7DE3C3;outline-offset:2px}
 .social svg{width:18px;height:18px;flex-shrink:0}
-.foot{margin-top:auto;padding-top:40px;text-align:center;font-size:13px;color:rgba(247,247,245,.5)}
+.foot{margin:auto 0 0;padding-top:32px;text-align:center;font-size:13px;color:rgba(247,247,245,.5)}
 
 /* Formular */
 .back{align-self:flex-start;background:none;border:0;color:rgba(247,247,245,.8);font:inherit;font-size:15px;font-weight:500;padding:8px 4px;margin:20px 0 10px -4px;cursor:pointer;border-radius:8px}
@@ -92,10 +91,11 @@ main{position:relative;z-index:1;max-width:440px;margin:0 auto;padding:56px 20px
 .done p{margin:0 0 20px;font-size:16px;line-height:23px;color:rgba(247,247,245,.72);font-weight:500}
 .dev{margin:18px 0 0;padding:14px;border-radius:14px;border:1px dashed #C9A227;background:#FFF9E6;color:#5C4A00;font-size:13px;line-height:19px;font-weight:500}
 .dev pre{margin:8px 0 0;white-space:pre-wrap;word-break:break-word;font:inherit;font-weight:500;color:var(--ink)}
-@media (prefers-reduced-motion:reduce){.btn,.bar i,.chip span,.f input[type=text],.f textarea{transition:none}.tag span,.rise,.card{animation:none;opacity:1;transform:none;filter:none}body::after{animation:none;transform:translate(-50%,0)}}
+@media (prefers-reduced-motion:reduce){.btn,.bar i,.chip span,.f input[type=text],.f textarea{transition:none}.tag span,.rise,.card{animation:none;opacity:1;transform:none;filter:none}.bg::after{animation:none;transform:translate(-50%,0)}}
 </style>
 </head>
 <body>
+<div class="bg" aria-hidden="true"></div>
 <main>
 
   <div class="logo" aria-label="Let's Go Digital"><span class="s" aria-hidden="true">lets</span><span aria-hidden="true">GO</span><span class="d" aria-hidden="true">DIGITAL.</span></div>
@@ -186,7 +186,7 @@ main{position:relative;z-index:1;max-width:440px;margin:0 auto;padding:56px 20px
       <div class="hp" aria-hidden="true"><label>Lăsați gol <input type="text" name="adresa2" tabindex="-1" autocomplete="off"></label></div>
 
       <p class="msg" id="msg" role="alert" hidden>Mai lipsesc răspunsurile marcate cu roșu.</p>
-      <p class="legal">Folosim răspunsurile doar ca să pregătim discuția. Detalii în <a id="privacy" href="#" target="_blank" rel="noopener">Politica de confidențialitate</a>.</p>
+      <p class="legal">Folosim răspunsurile doar ca să pregătim discuția.<span id="privacy-wrap" hidden> Detalii în <a id="privacy" href="#" target="_blank" rel="noopener">Politica de confidențialitate</a>.</span></p>
       <button class="btn btn-p" type="submit"><span id="submit">Continuați pe WhatsApp</span><svg class="arr" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg></button>
     </form>
   </section>
@@ -219,7 +219,7 @@ var CFG = {
   var views = { home: $('v-home'), form: $('v-form'), done: $('v-done') };
   var form = $('form'), canal = 'whatsapp', KEY = 'lgd-formular';
 
-  if (CFG.confidentialitate) $('privacy').href = CFG.confidentialitate;
+  if (CFG.confidentialitate) { $('privacy').href = CFG.confidentialitate; $('privacy-wrap').hidden = false; }
 
   function show(name) {
     for (var k in views) views[k].hidden = k !== name;
