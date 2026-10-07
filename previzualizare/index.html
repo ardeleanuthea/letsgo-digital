@@ -20,13 +20,17 @@ body{margin:0;font-family:'Inter',-apple-system,BlinkMacSystemFont,'Helvetica Ne
 .bg{position:fixed;inset:0;overflow:hidden;pointer-events:none;background:radial-gradient(900px 700px at 100% 0%,rgba(14,122,101,.62),rgba(14,122,101,0) 62%),radial-gradient(700px 560px at 0% 100%,rgba(16,185,129,.13),rgba(16,185,129,0) 60%),var(--dark)}
 .bg::before{content:"";position:absolute;inset:0;pointer-events:none;background-image:linear-gradient(rgba(247,247,245,.05) 1px,transparent 1px),linear-gradient(90deg,rgba(247,247,245,.05) 1px,transparent 1px);background-size:44px 44px;-webkit-mask-image:radial-gradient(ellipse 75% 55% at 50% 0%,#000 15%,transparent 75%);mask-image:radial-gradient(ellipse 75% 55% at 50% 0%,#000 15%,transparent 75%)}
 .bg::after{content:"";position:absolute;top:-180px;left:50%;width:560px;height:560px;border-radius:50%;pointer-events:none;background:radial-gradient(circle,rgba(16,185,129,.2),rgba(16,185,129,0) 65%);animation:drift 14s ease-in-out infinite alternate}
-main{position:relative;z-index:1;max-width:440px;margin:0 auto;padding:48px 20px max(18px,env(safe-area-inset-bottom));min-height:100vh;min-height:100svh;display:flex;flex-direction:column}
+main{position:relative;z-index:1;max-width:440px;margin:0 auto;padding:40px 20px max(18px,env(safe-area-inset-bottom));min-height:100vh;min-height:100svh;display:flex;flex-direction:column}
 [hidden]{display:none!important}
 
 /* Logo */
-.logo{display:flex;align-items:baseline;justify-content:center;gap:2px;font-weight:800;font-size:34px;letter-spacing:-.03em;line-height:1}
-.logo .s{font-family:'LG Script',cursive;font-weight:400;font-size:78px;letter-spacing:0;line-height:.6;margin-right:9px;padding-right:2px;position:relative;top:6px}
-.logo .d{color:var(--em);margin-left:8px}
+.logo{display:flex;justify-content:center;padding-top:26px}
+.lock{display:inline-flex;flex-direction:column;align-items:flex-end}
+.wm{display:inline-flex;align-items:baseline;font-weight:800;font-size:36px;letter-spacing:-.02em;line-height:1;white-space:nowrap}
+.wm-lets{font-family:'LG Script',cursive;font-weight:400;font-size:2.7em;line-height:.4;letter-spacing:0;margin-right:.02em;transform:translateY(.12em) rotate(-3deg);display:inline-block}
+.wm-go{margin-right:.2em}
+.wm-dig{color:var(--em)}
+.by{margin:9px .95em 0 0;font-size:10.5px;line-height:14px;font-weight:500;letter-spacing:.34em;text-transform:uppercase;color:rgba(247,247,245,.86)}
 .tag{margin:30px auto 0;max-width:350px;text-align:center;font-size:32px;line-height:36px;font-weight:600;letter-spacing:-.045em;color:var(--sand);text-wrap:balance}
 .tag span{display:inline-block;opacity:0;transform:translateY(10px);filter:blur(6px);animation:word .7s cubic-bezier(.2,.7,.2,1) forwards;animation-delay:calc(.15s + var(--i)*.09s)}
 @keyframes word{to{opacity:1;transform:none;filter:none}}
@@ -98,7 +102,7 @@ main{position:relative;z-index:1;max-width:440px;margin:0 auto;padding:48px 20px
 <div class="bg" aria-hidden="true"></div>
 <main>
 
-  <div class="logo" aria-label="Let's Go Digital"><span class="s" aria-hidden="true">lets</span><span aria-hidden="true">GO</span><span class="d" aria-hidden="true">DIGITAL.</span></div>
+  <div class="logo" role="img" aria-label="Let's Go Digital, by Thea &amp; David"><span class="lock" aria-hidden="true"><span class="wm"><span class="wm-lets">lets</span><span class="wm-go">GO</span><span class="wm-dig">DIGITAL.</span></span><span class="by">by Thea &amp; David</span></span></div>
   <p class="tag" id="tag"><span style="--i:0">Facem</span> <span style="--i:1">tehnologia</span> <span style="--i:2">să</span> <span style="--i:3">lucreze</span> <span style="--i:4">pentru</span> <span style="--i:5">voi.</span></p>
 
   <!-- 1. Butoanele -->
